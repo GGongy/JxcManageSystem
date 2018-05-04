@@ -257,8 +257,8 @@ public class MenuBar extends JMenuBar {
             xiaoshou_Menu = new JMenu();
             xiaoshou_Menu.setText("销售管理(X)");
             xiaoshou_Menu.setMnemonic(KeyEvent.VK_X);
-            xiaoshou_Menu.add(getXiaoshoudan_Item());         // 销售单
-            xiaoshou_Menu.add(getJinhuo_tuihuoItem());        // 销售退货
+            xiaoshou_Menu.add(getXiaoshoudan_Item());           // 销售单
+            xiaoshou_Menu.add(getXiaoshou_tuihuo_Item());       // 销售退货
         }
         return xiaoshou_Menu;
     }
