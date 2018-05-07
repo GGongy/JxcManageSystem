@@ -2,9 +2,8 @@ package com.gongy;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -201,6 +200,12 @@ public class MenuBar extends JMenuBar {
      * */
     private void initialize() {
         this.setSize(new Dimension(600, 24));
+        add(getJinhuo_Menu());
+        add(getXiaoshou_Menu());
+        add(getKucun_Menu());
+        add(getXinxi_chaxun_Menu());
+        add(getJiben_ziliao_Menu());
+        add(getXitong_weihu_Menu());
 
     }
 
@@ -289,6 +294,276 @@ public class MenuBar extends JMenuBar {
         return xiaoshou_tuihuo_Item;
     }
 
+    /**
+     * 初始化（库存管理）菜单的方法
+     * */
+    public JMenu getKucun_Menu() {
+        if (kucun_Menu == null) {
+            kucun_Menu = new JMenu();
+            kucun_Menu.setText("库存管理(K)");
+            kucun_Menu.setMnemonic(KeyEvent.VK_K);
+            kucun_Menu.add(getKucun_pandian_Item());         // 库存盘点
+            kucun_Menu.add(getJiage_tiaozheng_Item());       // 价格调整
+        }
+        return kucun_Menu;
+    }
+
+    /**
+     * 初始化（库存盘点）菜单项方法
+     * */
+    public JMenuItem getKucun_pandian_Item() {
+        if (kucun_pandian_Item == null) {
+            kucun_pandian_Item = new JMenuItem();
+            kucun_pandian_Item.setText("库存盘点");
+            kucun_pandian_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/kucun_pandian.png")));
+
+        }
+        return kucun_pandian_Item;
+    }
+
+    /**
+     * 初始化（价格调整）菜单项方法
+     * */
+    public JMenuItem getJiage_tiaozheng_Item() {
+        if (jiage_tiaozheng_Item == null) {
+            jiage_tiaozheng_Item = new JMenuItem();
+            jiage_tiaozheng_Item.setText("价格调整");
+            jiage_tiaozheng_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/jiage_tiaozheng.png")));
+
+        }
+        return jiage_tiaozheng_Item;
+    }
+
+    /**
+     * 初始化（信息查询）菜单方法
+     * */
+    public JMenu getXinxi_chaxun_Menu() {
+        if (xinxi_chaxun_Menu == null) {
+            xinxi_chaxun_Menu = new JMenu();
+            xinxi_chaxun_Menu.setText("信息查询(C)");
+            xinxi_chaxun_Menu.setMnemonic(KeyEvent.VK_C);
+            xinxi_chaxun_Menu.add(getXiaoshou_chaxun_Item());       // 销售查询
+            xinxi_chaxun_Menu.add(getShangpin_chaxun_Item());       // 商品查询
+            xinxi_chaxun_Menu.addSeparator();                       // 添加菜单项中的分隔线
+            xinxi_chaxun_Menu.add(getXiaoshou_paihang_Item());      // 销售查询
+
+        }
+        return xinxi_chaxun_Menu;
+    }
+
+    /**
+     * 初始化（销售查询）菜单项方法
+     * */
+    public JMenuItem getXiaoshou_chaxun_Item() {
+        if (xiaoshou_chaxun_Item == null) {
+            xiaoshou_chaxun_Item = new JMenuItem();
+            xiaoshou_chaxun_Item.setText("销售查询");
+            xiaoshou_chaxun_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/xiaoshou_chaxun.png")));
+
+        }
+        return xiaoshou_chaxun_Item;
+    }
+
+    /**
+     * 初始化（商品查询）菜单项方法
+     * */
+    public JMenuItem getShangpin_chaxun_Item() {
+        if (shangpin_chaxun_Item == null) {
+            shangpin_chaxun_Item = new JMenuItem();
+            shangpin_chaxun_Item.setText("商品查询");
+            shangpin_chaxun_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/shangpin_chaxun.png")));
+
+        }
+        return shangpin_chaxun_Item;
+    }
+
+    /**
+     * 初始化（销售排行）菜单项方法
+     * */
+    public JMenuItem getXiaoshou_paihang_Item() {
+        if (xiaoshou_paihang_Item == null) {
+            xiaoshou_paihang_Item = new JMenuItem();
+            xiaoshou_paihang_Item.setText("销售排行");
+            xiaoshou_paihang_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/xiaoshou_paihang.png")));
+
+        }
+        return xiaoshou_paihang_Item;
+    }
+
+    /**
+     * 初始化（基本资料）菜单方法
+     * */
+    public JMenu getJiben_ziliao_Menu() {
+        if (jiben_ziliao_Menu == null) {
+            jiben_ziliao_Menu = new JMenu();
+            jiben_ziliao_Menu.setText("基本资料(B)");
+            jiben_ziliao_Menu.setMnemonic(KeyEvent.VK_B);
+            jiben_ziliao_Menu.add(getShangpin_guanli_Item());          // 商品管理
+            jiben_ziliao_Menu.add(getKehu_guanli_Item());              // 客户管理
+            jiben_ziliao_Menu.add(getGys_guanli_Item());               // 供应商管理
+            jiben_ziliao_Menu.addSeparator();                          // 添加菜单项中的分隔线
+            jiben_ziliao_Menu.add(getJsr_guanli_Item());               // 经手人设置
+        }
+        return jiben_ziliao_Menu;
+    }
+
+    /**
+     * 初始化（商品管理）菜单项方法
+     * */
+    public JMenuItem getShangpin_guanli_Item() {
+        if (shangpin_guanli_Item == null) {
+            shangpin_guanli_Item = new JMenuItem();
+            shangpin_guanli_Item.setText("商品管理");
+            shangpin_guanli_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/shangpin_guanli.png")));
+
+        }
+        return shangpin_guanli_Item;
+    }
+
+    /**
+     * 初始化（客户管理）菜单项方法
+     * */
+    public JMenuItem getKehu_guanli_Item() {
+        if (kehu_guanli_Item == null) {
+            kehu_guanli_Item = new JMenuItem();
+            kehu_guanli_Item.setText("客户管理");
+            kehu_guanli_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/kehu_guanli.png")));
+
+        }
+        return kehu_guanli_Item;
+    }
+
+    /**
+     * 初始化（供应商管理）菜单项方法
+     * */
+    public JMenuItem getGys_guanli_Item() {
+        if (gys_guanli_Item == null) {
+            gys_guanli_Item = new JMenuItem();
+            gys_guanli_Item.setText("供应商管理");
+            gys_guanli_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/gys_guanli.png")));
+
+        }
+        return gys_guanli_Item;
+    }
+
+    /**
+     * 初始化（经手人设置）菜单项方法
+     * */
+    public JMenuItem getJsr_guanli_Item() {
+        if (jsr_guanli_Item == null) {
+            jsr_guanli_Item = new JMenuItem();
+            jsr_guanli_Item.setText("经手人设置");
+            jsr_guanli_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/jsr_shezhi.png")));
+
+        }
+        return jsr_guanli_Item;
+    }
+
+    /**
+     * 初始化（系统维护）菜单方法
+     * */
+    public JMenu getXitong_weihu_Menu() {
+        if (xitong_weihu_Menu == null) {
+            xitong_weihu_Menu = new JMenu();
+            xitong_weihu_Menu.setText("系统维护(S)");
+            xitong_weihu_Menu.setMnemonic(KeyEvent.VK_S);
+            xitong_weihu_Menu.add(getShuju_beifen_Item());      // 数据备份
+            xitong_weihu_Menu.addSeparator();
+            xitong_weihu_Menu.add(getMima_xiugai_Item());       // 密码修改
+            xitong_weihu_Menu.addSeparator();
+            xitong_weihu_Menu.add(getExitItem());               // 退出系统
+        }
+        return xitong_weihu_Menu;
+    }
+
+    /**
+     * 初始化（数据库备份与恢复）菜单项方法
+     * */
+    public JMenuItem getShuju_beifen_Item() {
+        if (shuju_beifen_Item == null) {
+            shuju_beifen_Item = new JMenuItem();
+            shuju_beifen_Item.setText("数据库备份与恢复");
+            shuju_beifen_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/shujuku_beifen_huifu.png")));
+
+        }
+        return shuju_beifen_Item;
+    }
+
+    /**
+     * 初始化（密码修改）菜单项方法
+     * */
+    public JMenuItem getMima_xiugai_Item() {
+        if (mima_xiugai_Item == null) {
+            mima_xiugai_Item = new JMenuItem();
+            mima_xiugai_Item.setText("密码修改");
+            mima_xiugai_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/mima_xiugai.png")));
+
+        }
+        return mima_xiugai_Item;
+    }
+
+    /**
+     * 初始化（退出）菜单项方法
+     * */
+    public JMenuItem getExitItem() {
+        if (exitItem == null) {
+            exitItem = new JMenuItem();
+            exitItem.setText("退出系统");
+            exitItem.setIcon(new ImageIcon(getClass().getResource("/res/icon/tuichu_xitong.png")));
+            exitItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                }
+            });
+        }
+        return exitItem;
+    }
+
+    /**
+     * 初始化（帮助）菜单方法
+     * */
+    public JMenu getBangzhu_Menu() {
+        if (bangzhu_Menu == null) {
+            bangzhu_Menu = new JMenu();
+            bangzhu_Menu.setText("帮助(H)");
+            bangzhu_Menu.setMnemonic(KeyEvent.VK_H);
+            // bangzhu_Menu.add();      // 关于
+            // bangzhu_Menu.add();      // 联系技术支持
+            // bangzhu_Menu.add();      // 访问技术网站
+        }
+        return bangzhu_Menu;
+    }
+
+    public JMenuItem getGuanyu_Item() {
+        if (guanyu_Item == null) {
+            guanyu_Item = new JMenuItem();
+            guanyu_Item.setText("关于");
+            guanyu_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/guanyu.png")));
+            URL url = DesktopPanel.class.getResource("/res/about.jpg");
+            ImageIcon aboutImage = new ImageIcon(url);
+            final JLabel imgLabel = new JLabel(aboutImage);
+            imgLabel.setVisible(false);
+            desktopPanel.add(imgLabel);
+            desktopPanel.setLayer(imgLabel, Integer.MAX_VALUE);
+            guanyu_Item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int dw = desktopPanel.getWidth();
+                    int dh = desktopPanel.getHeight();
+                    imgLabel.setBounds((dw - 500) / 2, (dh - 350) / 2, 500, 350);
+                    imgLabel.setVisible(true);
+                }
+            });
+            imgLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    imgLabel.setVisible(false);
+                }
+            });
+        }
+        return guanyu_Item;
+    }
 
     private JInternalFrame createIFrame(JMenuItem item, Class c) {
         return null;
