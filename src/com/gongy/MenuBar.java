@@ -1,9 +1,13 @@
 package com.gongy;
 
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.URL;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -200,13 +204,14 @@ public class MenuBar extends JMenuBar {
      * */
     private void initialize() {
         this.setSize(new Dimension(600, 24));
-        add(getJinhuo_Menu());
-        add(getXiaoshou_Menu());
-        add(getKucun_Menu());
-        add(getXinxi_chaxun_Menu());
-        add(getJiben_ziliao_Menu());
-        add(getXitong_weihu_Menu());
-
+        add(getJinhuo_Menu());              // 进货管理
+        add(getXiaoshou_Menu());            // 销售管理
+        add(getKucun_Menu());               // 库存管理
+        add(getXinxi_chaxun_Menu());        // 信息查询
+        add(getJiben_ziliao_Menu());        // 基本资料
+        add(getXitong_weihu_Menu());        // 系统维护
+        add(getChuangkou_Menu());           // 窗口
+        add(getBangzhu_Menu());             // 帮助
     }
 
     /**
@@ -528,13 +533,16 @@ public class MenuBar extends JMenuBar {
             bangzhu_Menu = new JMenu();
             bangzhu_Menu.setText("帮助(H)");
             bangzhu_Menu.setMnemonic(KeyEvent.VK_H);
-            // bangzhu_Menu.add();      // 关于
-            // bangzhu_Menu.add();      // 联系技术支持
-            // bangzhu_Menu.add();      // 访问技术网站
+            bangzhu_Menu.add(getGys_guanli_Item());         // 关于
+            bangzhu_Menu.add(getSupport_Item());            // 联系技术支持
+            bangzhu_Menu.add(getJisu_wangzhan_Item());      // 访问技术网站
         }
         return bangzhu_Menu;
     }
 
+    /**
+     * 初始化（关于）菜单项方法
+     * */
     public JMenuItem getGuanyu_Item() {
         if (guanyu_Item == null) {
             guanyu_Item = new JMenuItem();
@@ -565,6 +573,237 @@ public class MenuBar extends JMenuBar {
         return guanyu_Item;
     }
 
+    /**
+     * 初始化（联系技术支持）菜单项方法
+     * */
+    public JMenuItem getSupport_Item() {
+        if (support_Item == null) {
+            support_Item = new JMenuItem();
+            support_Item.setText("联系技术支持");
+            support_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/jishu_zhichi.png")));
+            support_Item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // 判断当前平台是否支持此类
+                    if (Desktop.isDesktopSupported()) {
+                        // 获取当前平台桌面实例
+                        Desktop desktop = Desktop.getDesktop();
+                        try {
+                            URI uri = new URI("baidu.com");
+                            desktop.mail(uri);
+                        } catch (URISyntaxException e1) {
+                            e1.printStackTrace();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+        }
+        return support_Item;
+    }
+
+    /**
+     * 初始化（访问技术网站）菜单项方法
+     * */
+    public JMenuItem getJisu_wangzhan_Item() {
+        if (jisu_wangzhan_Item == null) {
+            jisu_wangzhan_Item = new JMenuItem();
+            jisu_wangzhan_Item.setText("访问技术网站");
+            jisu_wangzhan_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/jishu_wangzhan.png")));
+            jisu_wangzhan_Item.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    // 判断当前平台是否支持此类
+                    if (Desktop.isDesktopSupported()) {
+                        // 获取当前平台桌面实例
+                        Desktop desktop = Desktop.getDesktop();
+                        try {
+                            URL url = new URL("baidu.com");
+                            desktop.browse(url.toURI());
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        } catch (URISyntaxException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            });
+        }
+        return jisu_wangzhan_Item;
+    }
+
+    /**
+     * 初始化（窗口）菜单的方法
+     * */
+
+    public JMenu getChuangkou_Menu() {
+        if (chuangkou_Menu == null) {
+            chuangkou_Menu = new JMenu();
+            chuangkou_Menu.setText("窗口(W)");
+            chuangkou_Menu.setMnemonic(KeyEvent.VK_W);
+            chuangkou_Menu.addMenuListener(new MenuListener() {
+                @Override
+                public void menuSelected(MenuEvent e) {
+                    chuangkou_Menu.removeAll();
+                    chuangkou_Menu.add(getPingpu_Item());           // 窗口平铺
+                    chuangkou_Menu.add(getCloseAll_Item());         // 全部关闭
+                    chuangkou_Menu.add(getAllIcon_Item());          // 全部最小化
+                    chuangkou_Menu.add(getAllResume_Item());        // 全部还原
+                    chuangkou_Menu.addSeparator();
+                    int count = 0;
+                    // 获取桌面面板中所有内部窗体
+                    JInternalFrame[] allFrames = desktopPanel.getAllFrames();
+                    for (final JInternalFrame frame : allFrames) {
+                        String frameTitle = frame.getTitle();
+                        count++;                    // 窗体计数器
+                        // 创建窗体菜单项
+                        final JMenuItem item = new JMenuItem(count + " " + frameTitle);
+                        chuangkou_Menu.add(item);
+                        item.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                // 处理窗体菜单项的单击事件
+                                try {
+                                    frame.setIcon(false);
+                                    frame.setSelected(true);
+                                } catch (PropertyVetoException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void menuDeselected(MenuEvent e) {
+
+                }
+
+                @Override
+                public void menuCanceled(MenuEvent e) {
+
+                }
+            });
+        }
+        return chuangkou_Menu;
+    }
+
+    /**
+     * 初始化（窗口平铺）菜单项方法
+     * */
+    public JMenuItem getPingpu_Item() {
+        if (pingpu_Item == null) {
+            pingpu_Item = new JMenuItem();
+            pingpu_Item.setText("窗口层叠");
+            pingpu_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/chuangkou_pingpu.png")));
+            pingpu_Item.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    JInternalFrame[] allFrames = desktopPanel.getAllFrames();
+                    int x = 0, y = 0;
+                    for (JInternalFrame iFrame : allFrames) {
+                        iFrame.setLocation(x, y);
+                        try {
+                            // 设置选项可用
+                            iFrame.setSelected(true);
+                        } catch (PropertyVetoException e1) {
+                            e1.printStackTrace();
+                        }
+                        int frameH = iFrame.getPreferredSize().height;
+                        int panelH = iFrame.getContentPane().getPreferredSize().height;
+                        int fSpacing = frameH - panelH;
+                        x += fSpacing;
+                        y += fSpacing;
+                        if (x + getWidth() / 2 > desktopPanel.getWidth()) {
+                            x = 0;
+                        }
+                        if (y + getHeight() / 2 > desktopPanel.getHeight()) {
+                            y = 0;
+                        }
+                    }
+                }
+            });
+        }
+        return pingpu_Item;
+    }
+
+    /**
+     * 初始化（全部关闭）菜单项方法
+     * */
+    public JMenuItem getCloseAll_Item() {
+        if (closeAll_Item == null) {
+            closeAll_Item = new JMenuItem();
+            closeAll_Item.setText("全部关闭");
+            closeAll_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/quanbu_guanbi.png")));
+            closeAll_Item.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    JInternalFrame[] allFrames = desktopPanel.getAllFrames();
+                    for (JInternalFrame frame : allFrames) {
+                        frame.doDefaultCloseAction();
+                    }
+                }
+            });
+        }
+        return closeAll_Item;
+    }
+
+    /**
+     * 初始化（全部最小化）菜单项方法
+     * */
+    public JMenuItem getAllIcon_Item() {
+        if (allIcon_Item == null) {
+            allIcon_Item = new JMenuItem();
+            allIcon_Item.setText("全部最小化");
+            allIcon_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/quanbu_zuixiaohua.png")));
+            allIcon_Item.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    JInternalFrame[] allFrames = desktopPanel.getAllFrames();
+                    for (JInternalFrame frame : allFrames) {
+                        try {
+                            frame.setIcon(true);
+                        } catch (PropertyVetoException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            });
+        }
+        return allIcon_Item;
+    }
+
+    /**
+     * 初始化（全部还原）菜单项方法
+     * */
+    public JMenuItem getAllResume_Item() {
+        if (allResume_Item == null) {
+            allResume_Item = new JMenuItem();
+            allResume_Item.setText("全部还原");
+            allResume_Item.setIcon(new ImageIcon(getClass().getResource("/res/icon/quanbu_huanyuan.png")));
+            allResume_Item.addActionListener(new java.awt.event.ActionListener(){
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    JInternalFrame[] allFrames = desktopPanel.getAllFrames();
+                    for (JInternalFrame frame : allFrames) {
+                        try {
+                            frame.setIcon(false);
+                        } catch (PropertyVetoException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            });
+        }
+        return allResume_Item;
+    }
+
+    /**
+     * 创建内部窗体的方法，该方法使用反射技术获取内部窗体的构造方法，从而创建内部窗体
+     * @param item: 激活该内部窗体的菜单项
+     * @param c:    内部窗体的 Class 对象
+     * */
     private JInternalFrame createIFrame(JMenuItem item, Class c) {
         return null;
     }
