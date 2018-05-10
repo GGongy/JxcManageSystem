@@ -1,12 +1,18 @@
 package com.gongy;
 
+import com.gongy.iframe.JinHuoDan_IFrame;
+
 import javax.swing.*;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -166,7 +172,7 @@ public class MenuBar extends JMenuBar {
     /**
     * 内部窗体的位置坐标
     * */
-    private int nextFrameX, nextFramY;
+    private int nextFrameX, nextFrameY;
 
     /**
     * （全部关闭）菜单项，位于（窗口）菜单内
@@ -236,12 +242,12 @@ public class MenuBar extends JMenuBar {
             jinhuoItem = new JMenuItem();
             jinhuoItem.setText("进货单");
             jinhuoItem.setIcon(new ImageIcon(getClass().getResource("/res/icon/jinhuodan.png")));
-            // jinhuoItem.addActionListener(new ActionListener() {
-            //     @Override
-            //     public void actionPerformed(ActionEvent e) {
-            //
-            //     }
-            // });
+            jinhuoItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    createIFrame(jinhuoItem, JinHuoDan_IFrame.class);
+                }
+            });
         }
         return jinhuoItem;
     }
@@ -805,6 +811,54 @@ public class MenuBar extends JMenuBar {
      * @param c:    内部窗体的 Class 对象
      * */
     private JInternalFrame createIFrame(JMenuItem item, Class c) {
-        return null;
+        Constructor constructor = c.getConstructors()[0];
+        JInternalFrame iFrame = iFrames.get(item);
+        try {
+            if (iFrame == null || iFrame.isClosed()) {
+                    iFrame = (JInternalFrame)constructor.newInstance(new Object[] {});
+                    iFrames.put(item, iFrame);
+                    iFrame.setFrameIcon(item.getIcon());
+                    iFrame.setLocation(nextFrameX, nextFrameY);
+                    int frameH = iFrame.getPreferredSize().height;
+                    int panelH = iFrame.getContentPane().getPreferredSize().height;
+                    int fSpacing = frameH - panelH;
+                    nextFrameX += fSpacing;
+                    nextFrameY += fSpacing;
+                    if (nextFrameX + iFrame.getWidth() > desktopPanel.getHeight()) {
+                        nextFrameX = 0;
+                    }
+                    if (nextFrameY + iFrame.getHeight() > desktopPanel.getHeight()) {
+                        nextFrameY = 0;
+                    }
+                    desktopPanel.add(iFrame);
+                    iFrame.setResizable(false);
+                    iFrame.setMaximizable(false);
+                    iFrame.setVisible(true);
+                }
+            iFrame.setSelected(true);
+            stateLabel.setText(iFrame.getTitle());
+            iFrame.addInternalFrameListener(new InternalFrameAdapter() {
+                    @Override
+                    public void internalFrameActivated(InternalFrameEvent e) {
+                        super.internalFrameActivated(e);
+                        JInternalFrame frame = e.getInternalFrame();
+                        stateLabel.setText(frame.getTitle());
+                    }
+
+                    @Override
+                    public void internalFrameDeactivated(InternalFrameEvent e) {
+                        stateLabel.setText("没有选择窗体");
+                    }
+            });
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+        return iFrame;
     }
 }
