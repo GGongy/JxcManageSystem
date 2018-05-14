@@ -7,5 +7,14 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://G:/Java从入门到精通/TM（视频讲解及实例源程序）/TM（视频讲解及实例源程序）/sl（实例源程序）/企业进销存管理系统/lib/mysql_connector_java_5.1.36_bin.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
