@@ -1,6 +1,7 @@
 package com.gongy.login;
 
 import com.gongy.MainFrame;
+import com.gongy.dao.Dao;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 
 // 登录窗体
 public class LoginDialog extends JFrame {
@@ -100,11 +102,16 @@ public class LoginDialog extends JFrame {
             loginButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    userStr = userField.getText();                              // 获取“文本框“中的内容
-                    String passStr = new String(passwordField.getPassword());   // 获取“密码框“中的内容
-                    // 验证“登录名”，“密码”为 false 时
-                    // if (){
-                    //
+                    // try {
+                        userStr = userField.getText();                              // 获取“文本框“中的内容
+                        String passStr = new String(passwordField.getPassword());   // 获取“密码框“中的内容
+                        // 验证“登录名”，“密码”为 false 时
+                        // if (!Dao.checkLogin(userStr, passStr)){
+                        //     JOptionPane.showMessageDialog(LoginDialog.this, "用户名或密码不正确", "登录失败", JOptionPane.ERROR_MESSAGE);
+                        //     return;
+                        // }
+                    // } catch (SQLException e1) {
+                    //     e1.printStackTrace();
                     // }
                     mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);          // 设置主窗体的关闭方式
                     mainFrame.setVisible(true);                                 // 设置住窗体可见
