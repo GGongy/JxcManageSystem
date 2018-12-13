@@ -1,6 +1,11 @@
 package com.gongy.dao;
 
 
+import com.gongy.Item;
+import com.gongy.dao.model.TbGysinfo;
+import com.gongy.dao.model.TbKhinfo;
+import com.gongy.dao.model.TbKucun;
+import com.gongy.dao.model.TbSpinfo;
 import com.sun.javafx.collections.ListListenerHelper;
 
 import java.awt.*;
@@ -276,6 +281,216 @@ public class Dao {
     public static List getGysInfos() {
         List list = findforList("select id, name from tb_gysinfo");
         return list;
+    }
+
+    // 读取客户信息
+    public static TbKhinfo getKhyInfo(Item item){
+        String where = "khname='" + item.getName() + "'";
+        if (item.getId() != null) {
+            where = "id='" + item.getId() + "'";
+        }
+        TbKhinfo info = new TbKhinfo();
+        ResultSet set = findForResultSet("select * from tb_khinfo where " + where);
+        try {
+            if (set.next()) {
+                info.setId(set.getString("id").trim());
+                info.setKhname(set.getString("kuname").trim());
+                info.setJian(set.getString("jian").trim());
+                info.setAddress(set.getString("address").trim());
+                info.setPostcode(set.getString("postcode").trim());
+                info.setPhone(set.getString("phone").trim());
+                info.setFax(set.getString("fax").trim());
+                info.setLian(set.getString("lian").trim());
+                info.setTel(set.getString("tel").trim());
+                info.setMail(set.getString("mail").trim());
+                info.setBank(set.getString("bank").trim());
+                info.setNum(set.getString("num").trim());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return info;
+    }
+
+    // 读取指定供应商信息
+    public static TbGysinfo getGysInfo(Item item) {
+        String where = "name'" + item.getName() + "'";
+        if (item.getId() != null) {
+            where = "id='" + item.getId() + "'";
+        }
+        TbGysinfo info = new TbGysinfo();
+        ResultSet set = findForResultSet("select * from tb_gysinfo where " + where);
+        try {
+            if (set.next()) {
+                info.setId(set.getString("id").trim());
+                info.setName(set.getString("name").trim());
+                info.setJc(set.getString("jc").trim());
+                info.setAddress(set.getString("address").trim());
+                info.setCode(set.getString("code").trim());
+                info.setTel(set.getString("tel").trim());
+                info.setFax(set.getString("fax").trim());
+                info.setLinkman(set.getString("linkman").trim());
+                info.setPhone(set.getString("phone").trim());
+                info.setBank(set.getString("bank").trim());
+                info.setMail(set.getString("mail").trim());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return info;
+    }
+
+    // 读取经手人
+
+    // 执行指定查询
+    public static ResultSet query(String QueryStr) {
+        ResultSet set = findForResultSet(QueryStr);
+        return set;
+    }
+
+    // 执行删除
+    public static int delete(String sql) {
+        return update(sql);
+    }
+
+    // 添加客户信息的方法
+    public static boolean addKuhu(TbKhinfo khinfo) {
+        if (khinfo != null) {
+            return insert("insert tb_khinfo valuse('" + khinfo.getId() + "','"
+                            + khinfo.getKhname() + "','" + khinfo.getJian() + "','"
+                            + khinfo.getAddress() + "','" + khinfo.getPostcode() + "','"
+                            + khinfo.getPhone() + "','" + khinfo.getFax() + "','"
+                            + khinfo.getLian() + "','" + khinfo.getTel() + "','"
+                            + khinfo.getMail() + "','" + khinfo.getBank() + "','"
+                            + khinfo.getNum() + "')");
+        }
+        return false;
+    }
+
+    // 修改客户信息的方法
+    public static int uodateKeHu(TbKhinfo khinfo) {
+        return update("update tb_khinfo set jian='" + khinfo.getLian()
+                        + "',address='" + khinfo.getAddress() + "',postcode='"
+                        + khinfo.getPostcode() + "',phone='" + khinfo.getPhone()
+                        + "',fax='" + khinfo.getFax() + "',lian='" + khinfo.getLian()
+                        + "',tel='" + khinfo.getTel() + "',mail='" + khinfo.getMail()
+                        + "',bank='" + khinfo.getBank() + "',num='" + khinfo.getNum()
+                        + "' where id='" + khinfo.getId() + "'");
+    }
+
+    // 修改库存的方法
+    public static int upDateKucunPrice(TbKucun kucun) {
+        return update("update tb_kucun price=" + kucun.getPrice()
+                        + " where id='" + kucun.getId() + "'");
+    }
+
+    // 修改供应商信息的方法
+    public static int updateGys(TbGysinfo gysinfo) {
+        return update("update tb_gysinfo set jc='" + gysinfo.getJc() + "',address='"
+                        + gysinfo.getAddress() + "',code='" + gysinfo.getCode() + "', tel='"
+                        + gysinfo.getTel() + "',fax='" + gysinfo.getFax() + "',linkman='"
+                        + gysinfo.getLinkman() + "',phone='" + gysinfo.getPhone() + "',bank='"
+                        + gysinfo.getBank() + "',mail='" + gysinfo.getMail() + "' where id='"
+                        + gysinfo.getId() + "'");
+    }
+
+    // 添加供应商信息的方法
+    public static boolean addGys(TbGysinfo gysinfo) {
+        if (gysinfo != null) {
+            return insert("insert tb_Gysinfo values ('" + gysinfo.getId() + "','"
+                            + gysinfo.getName() + "','" + gysinfo.getJc() + "','"
+                            + gysinfo.getAddress() + "','" + gysinfo.getCode() + "','"
+                            + gysinfo.getTel() + "','" + gysinfo.getFax() + "','"
+                            + gysinfo.getLinkman() + "','" + gysinfo.getPhone() + "','"
+                            + gysinfo.getBank() + "','" + gysinfo.getMail() + "')");
+        }
+        return false;
+    }
+
+    // 添加商品方法
+    public static boolean addSp(TbSpinfo spinfo) {
+        if (spinfo != null) {
+            return insert("insert tb_spinfo valuse ('" + spinfo.getId() + "','"
+                            + spinfo.getSpname() + "','" + spinfo.getJc() + "','"
+                            + spinfo.getCd() + "','" + spinfo.getDw() + "','"
+                            + spinfo.getGg() + "','" + spinfo.getBz() + "','"
+                            + spinfo.getPh() + "','" + spinfo.getPzwh() + "','"
+                            + spinfo.getMemo() + "','" + spinfo.getGysname() + "')");
+        }
+        return false;
+    }
+
+    // 更新商品方法
+    public static int updateSp(TbSpinfo spinfo) {
+        return update("update tb_Spinfo set jc='" + spinfo.getJc() + "',cd='"
+                        + spinfo.getCd() + "',dw='" + spinfo.getDw() + "',gg='"
+                        + spinfo.getGg() + "',bz='" + spinfo.getBz() + "',ph='"
+                        + spinfo.getPh() + "',pzwh='" + spinfo.getPzwh() + "',memo='"
+                        + spinfo.getMemo() + "',gysname='" + spinfo.getGysname() + "' where id='"
+                        + spinfo.getId() + "'");
+    }
+
+    // 读取商品信息
+    public static TbSpinfo getSpInfo(Item item) {
+        String where = "spname='" + item.getName() + "'";
+        if (item.getId() != null) {
+            where = "id='" + item.getId() + "'";
+        }
+        ResultSet rs = findForResultSet("select * from tb_Spinfo where" + where);
+        TbSpinfo spinfo = new TbSpinfo();
+        try {
+            if (rs.next()) {
+                spinfo.setId(rs.getString("id").trim());
+                spinfo.setSpname(rs.getString("spname").trim());
+                spinfo.setJc(rs.getString("jc").trim());
+                spinfo.setCd(rs.getString("cd").trim());
+                spinfo.setDw(rs.getString("dw").trim());
+                spinfo.setGg(rs.getString("gg").trim());
+                spinfo.setBz(rs.getString("bz").trim());
+                spinfo.setPh(rs.getString("ph").trim());
+                spinfo.setPzwh(rs.getString("pzwh").trim());
+                spinfo.setMemo(rs.getString("memo").trim());
+                spinfo.setGysname(rs.getString("gysname").trim());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return spinfo;
+    }
+
+    // 获取所有商品信息
+    public static List getSpInfos() {
+        List list = findforList("select * from tb_spinfo");
+        return list;
+    }
+
+    // 获取库存商品信息
+
+
+
+
+    // 数据更新
+    public static int update(String sql) {
+        int result = 0;
+        try {
+            Statement stat = conn.createStatement();
+            result = stat.executeUpdate(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // 添加数据
+    public static boolean insert(String sql) {
+        boolean result = false;
+        try {
+            Statement stat = conn.createStatement();
+            result = stat.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     private static List findforList(String sql) {
